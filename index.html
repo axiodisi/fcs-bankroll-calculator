@@ -116,7 +116,7 @@
             // Additional Calculations
             const expectedDuration = Math.floor(bankroll / (roundedBaseBet * totalExposure));
             const potentialWinnings = roundedBaseBet * 0.63 * actualRounds;
-            const riskLevel = roundedBaseBet * actualRounds > bankroll * 0.5 ? 'High' : 'Low';
+            const riskLevel = roundedBaseBet * actualRounds > bankroll * 0.5 ? 'High' : 'Medium';
             const lossProbability = 1 - Math.pow(0.63, actualRounds);
 
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
