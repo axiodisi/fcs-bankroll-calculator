@@ -15,15 +15,15 @@
             max-width: 600px;
             margin: auto;
             background: #fff;
-            padding: 20px;
+            padding: 20px.
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            text-align: center;
+            text-align: center.
             color: #333;
         }
         form {
-            display: flex;
+            display: flex.
             flex-direction: column.
         }
         label {
@@ -62,8 +62,6 @@
         <form id="fcsForm">
             <label for="bankroll">Bankroll ($):</label>
             <input type="number" id="bankroll" name="bankroll" required>
-            <label for="rounds">Ideal Number of Rounds:</label>
-            <input type="number" id="rounds" name="rounds" required>
             <label for="max_loss">Max Loss ($):</label>
             <input type="number" id="max_loss" name="max_loss" required>
             <button type="button" onclick="calculateOptimalBet()">Calculate Optimal Base Bet</button>
@@ -75,58 +73,56 @@
 
         // Function to calculate the total exposure based on the Fibonacci sequence up to a certain length
         function calculateTotalExposure(sequence, length) {
-            // Since we are betting on four spots every round, multiply the sequence sum by 4
             return 4 * sequence.slice(0, length).reduce((a, b) => a + b, 0);
         }
 
         function calculateOptimalBet() {
             const bankroll = parseFloat(document.getElementById('bankroll').value);
-            const rounds = parseInt(document.getElementById('rounds').value);
             const maxLoss = parseFloat(document.getElementById('max_loss').value);
 
-            console.log(`Bankroll: ${bankroll}, Rounds: ${rounds}, Max Loss: ${maxLoss}`);
+            console.log(`Bankroll: ${bankroll}, Max Loss: ${maxLoss}`);
 
-            // Calculate total exposure for the specified number of rounds or the length of the Fibonacci sequence, whichever is smaller
-            const totalExposure = calculateTotalExposure(fibonacciSequence, Math.min(rounds, fibonacciSequence.length));
-            console.log(`Total Exposure for ${Math.min(rounds, fibonacciSequence.length)} rounds: ${totalExposure}`);
+            // Calculate the worst-case exposure for the length of the Fibonacci sequence
+            const totalExposure = calculateTotalExposure(fibonacciSequence, fibonacciSequence.length);
+            console.log(`Total Exposure for full Fibonacci sequence: ${totalExposure}`);
 
             // Calculate the max base bet considering bankroll and max loss
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
             console.log(`Initial Max Base Bet: ${maxBaseBet}`);
 
-            // Adjust for ideal rounds, making the base bet more aggressive for fewer rounds
-            if (rounds <= 5) {
-                maxBaseBet = Math.ceil(maxBaseBet);
-            } else {
-                maxBaseBet = Math.floor(maxBaseBet / (rounds / 10));
-            }
-
             // Ensure the minimum base bet is at least $1
             let roundedBaseBet = Math.max(Math.round(maxBaseBet), 1);
 
-            // Calculate the worst-case scenario for the given max loss
+            // Calculate worst-case and best-case scenarios
             let worstCaseExposure = 0;
-            let actualRounds = rounds;
-            for (let i = 0; i < rounds; i++) {
-                worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)] * 4;
+            let minRounds = 0;
+            for (let i = 0; i < fibonacciSequence.length; i++) {
+                worstCaseExposure += fibonacciSequence[i] * 4;
                 if (worstCaseExposure * roundedBaseBet > maxLoss) {
-                    actualRounds = i;
-                    document.getElementById('result').innerText = `Given your max loss, the ideal number of rounds could be as little as ${i} rounds at a $${roundedBaseBet} base bet.`;
-                    return;
+                    minRounds = i;
+                    break;
                 }
             }
+            if (minRounds === 0) minRounds = fibonacciSequence.length; // Fallback if max loss is very high
+
+            // Best-case scenario: assume an average win rate and 1800% improvement
+            const avgWinRate = 0.63;
+            const improvementFactor = 18;
+            const maxRounds = Math.floor(bankroll / (roundedBaseBet * 4));
+            const potentialProfit = bankroll * improvementFactor;
 
             // Additional Calculations
-            const expectedDuration = Math.floor(bankroll / (roundedBaseBet * totalExposure));
-            const potentialWinnings = roundedBaseBet * 0.63 * actualRounds * 4; // since there are 4 bets per round
-            const riskLevel = roundedBaseBet * actualRounds * 4 > bankroll * 0.5 ? 'High' : 'Medium';
-            const lossProbability = 1 - Math.pow(0.63, actualRounds * 4);
+            const minTimePlayed = minRounds;
+            const maxTimePlayed = maxRounds;
+            const riskLevel = roundedBaseBet * minRounds * 4 > bankroll * 0.5 ? 'High' : 'Medium';
+            const lossProbability = 1 - Math.pow(avgWinRate, minRounds * 4);
 
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
             document.getElementById('result').innerText = `
                 Optimal Base Bet: $${roundedBaseBet}
-                \nExpected Duration of Play: ${expectedDuration} rounds
-                \nPotential Winnings: $${potentialWinnings.toFixed(2)}
+                \nMinimum Expected Duration of Play: ${minTimePlayed} rounds
+                \nMaximum Expected Duration of Play: ${maxTimePlayed} rounds
+                \nPotential Profit: $${potentialProfit.toFixed(2)}
                 \nRisk Level: ${riskLevel}
                 \nProbability of Hitting Max Loss: ${(lossProbability * 100).toFixed(2)}%
             `;
