@@ -100,6 +100,17 @@
 
             // Ensure the minimum base bet is at least $1
             let roundedBaseBet = Math.max(Math.round(maxBaseBet), 1);
+
+            // Calculate the worst-case scenario for the given max loss
+            let worstCaseExposure = 0;
+            for (let i = 0; i < rounds; i++) {
+                worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)];
+                if (worstCaseExposure * roundedBaseBet > maxLoss) {
+                    document.getElementById('result').innerText = `Given your max loss, the ideal number of rounds could be as little as ${i} rounds at a $${roundedBaseBet} base bet.`;
+                    return;
+                }
+            }
+
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
             document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
         }
