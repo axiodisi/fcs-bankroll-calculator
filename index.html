@@ -15,44 +15,44 @@
             max-width: 600px;
             margin: auto;
             background: #fff;
-            padding: 20px.
+            padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            text-align: center.
+            text-align: center;
             color: #333;
         }
         form {
-            display: flex.
-            flex-direction: column.
+            display: flex;
+            flex-direction: column;
         }
         label {
-            margin-top: 10px.
+            margin-top: 10px;
         }
         input {
-            padding: 8px.
-            margin-top: 5px.
-            border: 1px solid #ddd.
-            border-radius: 4px.
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         button {
-            margin-top: 20px.
-            padding: 10px.
-            background-color: #007BFF.
-            color: white.
-            border: none.
-            border-radius: 4px.
-            cursor: pointer.
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3.
+            background-color: #0056b3;
         }
         #result {
-            margin-top: 20px.
-            padding: 10px.
-            background-color: #f1f1f1.
-            border-radius: 4px.
-            text-align: center.
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+            text-align: center;
         }
     </style>
 </head>
@@ -71,7 +71,6 @@
     <script>
         const fibonacciSequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
-        // Function to calculate the total exposure based on the Fibonacci sequence up to a certain length
         function calculateTotalExposure(sequence, length) {
             return 4 * sequence.slice(0, length).reduce((a, b) => a + b, 0);
         }
@@ -82,18 +81,14 @@
 
             console.log(`Bankroll: ${bankroll}, Max Loss: ${maxLoss}`);
 
-            // Calculate the worst-case exposure for the length of the Fibonacci sequence
             const totalExposure = calculateTotalExposure(fibonacciSequence, fibonacciSequence.length);
             console.log(`Total Exposure for full Fibonacci sequence: ${totalExposure}`);
 
-            // Calculate the max base bet considering bankroll and max loss
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
             console.log(`Initial Max Base Bet: ${maxBaseBet}`);
 
-            // Ensure the minimum base bet is at least $1
             let roundedBaseBet = Math.max(Math.round(maxBaseBet), 1);
 
-            // Calculate worst-case and best-case scenarios
             let worstCaseExposure = 0;
             let minRounds = 0;
             for (let i = 0; i < fibonacciSequence.length; i++) {
@@ -103,28 +98,28 @@
                     break;
                 }
             }
-            if (minRounds === 0) minRounds = fibonacciSequence.length; // Fallback if max loss is very high
+            if (minRounds === 0) minRounds = fibonacciSequence.length;
 
-            // Best-case scenario: assume an average win rate and 1800% improvement
             const avgWinRate = 0.63;
             const improvementFactor = 18;
             const maxRounds = Math.floor(bankroll / (roundedBaseBet * 4));
             const potentialProfit = bankroll * improvementFactor;
 
-            // Additional Calculations
             const minTimePlayed = minRounds;
             const maxTimePlayed = maxRounds;
+
             const riskLevel = roundedBaseBet * minRounds * 4 > bankroll * 0.5 ? 'High' : 'Medium';
-            const lossProbability = 1 - Math.pow(avgWinRate, minRounds * 4);
+
+            const lossProbability = (1 - avgWinRate) ** (minRounds * 4);
 
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
-            document.getElementById('result').innerText = `
-                Optimal Base Bet: $${roundedBaseBet}
-                \nMinimum Expected Duration of Play: ${minTimePlayed} rounds
-                \nMaximum Expected Duration of Play: ${maxTimePlayed} rounds
-                \nPotential Profit: $${potentialProfit.toFixed(2)}
-                \nRisk Level: ${riskLevel}
-                \nProbability of Hitting Max Loss: ${(lossProbability * 100).toFixed(2)}%
+            document.getElementById('result').innerHTML = `
+                <strong>Optimal Base Bet:</strong> $${roundedBaseBet}<br>
+                <strong>Minimum Expected Duration of Play:</strong> ${minTimePlayed} rounds<br>
+                <strong>Maximum Expected Duration of Play:</strong> ${maxTimePlayed} rounds<br>
+                <strong>Potential Profit:</strong> $${potentialProfit.toFixed(2)}<br>
+                <strong>Risk Level:</strong> ${riskLevel}<br>
+                <strong>Probability of Hitting Max Loss:</strong> ${(lossProbability * 100).toFixed(2)}%
             `;
         }
     </script>
