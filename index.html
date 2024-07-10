@@ -42,17 +42,17 @@
             color: white;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: pointer.
         }
         button:hover {
             background-color: #0056b3;
         }
         #result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-            text-align: center;
+            margin-top: 20px.
+            padding: 10px.
+            background-color: #f1f1f1.
+            border-radius: 4px.
+            text-align: center.
         }
     </style>
 </head>
@@ -94,13 +94,12 @@
 
             // Determine max base bet considering max loss and ideal number of rounds
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
-            console.log(`Initial Max Base Bet: ${maxBaseBet}`);
 
             // Adjust for ideal rounds
             for (let i = 0; i < rounds; i++) {
                 const exposure = calculateTotalExposure(fibonacciSequence, i + 1);
                 if (maxBaseBet * exposure <= bankroll && maxBaseBet * exposure <= maxLoss) {
-                    let roundedBaseBet = Math.max(Math.round(maxBaseBet), 1); // Ensure the minimum base bet is at least $1
+                    let roundedBaseBet = Math.max(Math.ceil(maxBaseBet / (rounds / 10)), 1); // Ensure the minimum base bet is at least $1
                     console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
                     document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
                     return;
