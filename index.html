@@ -88,18 +88,18 @@
             // Calculate total exposure
             const totalExposure = calculateTotalExposure(fibonacciSequence, fibonacciSequence.length);
 
-            // Determine max base bet considering max loss and ideal number of rounds
-            let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
+            // Determine max base bet
+            let maxBaseBet = bankroll / totalExposure;
 
             // Adjust for ideal rounds
             for (let i = 0; i < rounds; i++) {
                 const exposure = calculateTotalExposure(fibonacciSequence, i + 1);
-                if (maxBaseBet * exposure <= bankroll && maxBaseBet * exposure <= maxLoss) {
+                if (maxBaseBet * exposure <= bankroll) {
                     let roundedBaseBet = Math.round(maxBaseBet);
                     document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
                     return;
                 }
-                maxBaseBet -= 0.1;
+                maxBaseBet -= 1;
             }
 
             document.getElementById('result').innerText = 'Unable to determine an optimal base bet. Please adjust your parameters.';
