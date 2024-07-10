@@ -76,7 +76,9 @@
         const fibonacciSequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
         function calculateTotalExposure(sequence, length) {
-            return sequence.slice(0, length).reduce((a, b) => a + b, 0);
+            const exposure = sequence.slice(0, length).reduce((a, b) => a + b, 0);
+            console.log(`Total Exposure for length ${length}: ${exposure}`);
+            return exposure;
         }
 
         function calculateOptimalBet() {
@@ -85,21 +87,26 @@
             const maxLoss = parseFloat(document.getElementById('max_loss').value);
             const takeProfit = parseFloat(document.getElementById('take_profit').value);
 
+            console.log(`Bankroll: ${bankroll}, Rounds: ${rounds}, Max Loss: ${maxLoss}, Take Profit: ${takeProfit}`);
+
             // Calculate total exposure
             const totalExposure = calculateTotalExposure(fibonacciSequence, fibonacciSequence.length);
 
             // Determine max base bet considering max loss and ideal number of rounds
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
+            console.log(`Initial Max Base Bet: ${maxBaseBet}`);
 
             // Adjust for ideal rounds
             for (let i = 0; i < rounds; i++) {
                 const exposure = calculateTotalExposure(fibonacciSequence, i + 1);
                 if (maxBaseBet * exposure <= bankroll && maxBaseBet * exposure <= maxLoss) {
                     let roundedBaseBet = Math.round(maxBaseBet);
+                    console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
                     document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
                     return;
                 }
                 maxBaseBet -= 0.1;
+                console.log(`Adjusted Max Base Bet: ${maxBaseBet}`);
             }
 
             document.getElementById('result').innerText = 'Unable to determine an optimal base bet. Please adjust your parameters.';
