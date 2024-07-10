@@ -42,7 +42,7 @@
             color: white;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: pointer.
         }
         button:hover {
             background-color: #0056b3;
@@ -52,7 +52,7 @@
             padding: 10px;
             background-color: #f1f1f1;
             border-radius: 4px;
-            text-align: center;
+            text-align: center.
         }
     </style>
 </head>
@@ -111,8 +111,20 @@
                 }
             }
 
+            // Additional Calculations
+            const expectedDuration = Math.floor(bankroll / (roundedBaseBet * totalExposure));
+            const potentialWinnings = roundedBaseBet * 0.63 * rounds;
+            const riskLevel = roundedBaseBet * rounds > bankroll * 0.5 ? 'High' : 'Low';
+            const lossProbability = 1 - Math.pow(0.63, rounds);
+
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
-            document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
+            document.getElementById('result').innerText = `
+                Optimal Base Bet: $${roundedBaseBet}
+                \nExpected Duration of Play: ${expectedDuration} rounds
+                \nPotential Winnings: $${potentialWinnings.toFixed(2)}
+                \nRisk Level: ${riskLevel}
+                \nProbability of Hitting Max Loss: ${(lossProbability * 100).toFixed(2)}%
+            `;
         }
     </script>
 </body>
