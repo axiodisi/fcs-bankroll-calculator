@@ -95,7 +95,7 @@
             for (let i = 0; i < rounds; i++) {
                 const exposure = calculateTotalExposure(fibonacciSequence, i + 1);
                 if (maxBaseBet * exposure <= bankroll) {
-                    let roundedBaseBet = Math.round(maxBaseBet / 100) * 100;
+                    let roundedBaseBet = Math.round(maxBaseBet);
                     document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
                     return;
                 }
