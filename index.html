@@ -42,7 +42,7 @@
             color: white;
             border: none;
             border-radius: 4px;
-            cursor: pointer.
+            cursor: pointer;
         }
         button:hover {
             background-color: #0056b3;
@@ -52,7 +52,7 @@
             padding: 10px;
             background-color: #f1f1f1;
             border-radius: 4px;
-            text-align: center.
+            text-align: center;
         }
     </style>
 </head>
@@ -103,9 +103,11 @@
 
             // Calculate the worst-case scenario for the given max loss
             let worstCaseExposure = 0;
+            let actualRounds = rounds;
             for (let i = 0; i < rounds; i++) {
                 worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)];
                 if (worstCaseExposure * roundedBaseBet > maxLoss) {
+                    actualRounds = i;
                     document.getElementById('result').innerText = `Given your max loss, the ideal number of rounds could be as little as ${i} rounds at a $${roundedBaseBet} base bet.`;
                     return;
                 }
@@ -113,9 +115,9 @@
 
             // Additional Calculations
             const expectedDuration = Math.floor(bankroll / (roundedBaseBet * totalExposure));
-            const potentialWinnings = roundedBaseBet * 0.63 * rounds;
-            const riskLevel = roundedBaseBet * rounds > bankroll * 0.5 ? 'High' : 'Low';
-            const lossProbability = 1 - Math.pow(0.63, rounds);
+            const potentialWinnings = roundedBaseBet * 0.63 * actualRounds;
+            const riskLevel = roundedBaseBet * actualRounds > bankroll * 0.5 ? 'High' : 'Low';
+            const lossProbability = 1 - Math.pow(0.63, actualRounds);
 
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
             document.getElementById('result').innerText = `
