@@ -110,18 +110,14 @@
 
             const riskLevel = roundedBaseBet * minRounds * 4 > bankroll * 0.5 ? 'High' : 'Medium';
 
-            // More accurate calculation of loss probability
-            const lossProbability = Math.pow(1 - avgWinRate, minRounds * 4);
-            const formattedLossProbability = lossProbability < 0.01 ? "< 1%" : `${(lossProbability * 100).toFixed(2)}%`;
-
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
             document.getElementById('result').innerHTML = `
                 <strong>Optimal Base Bet:</strong> $${roundedBaseBet}<br>
                 <strong>Minimum Expected Duration of Play:</strong> ${minTimePlayed} rounds<br>
                 <strong>Maximum Expected Duration of Play:</strong> ${maxTimePlayed} rounds<br>
                 <strong>Potential Profit:</strong> $${potentialProfit.toFixed(2)}<br>
-                <strong>Risk Level:</strong> ${riskLevel}<br>
-                <strong>Probability of Hitting Max Loss:</strong> ${formattedLossProbability}
+                <strong>Potential Loss:</strong> $${maxLoss}<br>
+                <strong>Risk Level:</strong> ${riskLevel}
             `;
         }
     </script>
