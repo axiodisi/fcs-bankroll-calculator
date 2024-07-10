@@ -24,35 +24,35 @@
         }
         form {
             display: flex;
-            flex-direction: column;
+            flex-direction: column.
         }
         label {
-            margin-top: 10px;
+            margin-top: 10px.
         }
         input {
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 8px.
+            margin-top: 5px.
+            border: 1px solid #ddd.
+            border-radius: 4px.
         }
         button {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            margin-top: 20px.
+            padding: 10px.
+            background-color: #007BFF.
+            color: white.
+            border: none.
+            border-radius: 4px.
+            cursor: pointer.
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3.
         }
         #result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-            text-align: center;
+            margin-top: 20px.
+            padding: 10px.
+            background-color: #f1f1f1.
+            border-radius: 4px.
+            text-align: center.
         }
     </style>
 </head>
@@ -73,8 +73,10 @@
     <script>
         const fibonacciSequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
+        // Function to calculate the total exposure based on the Fibonacci sequence up to a certain length
         function calculateTotalExposure(sequence, length) {
-            return sequence.slice(0, length).reduce((a, b) => a + b, 0);
+            // Since we are betting on four spots every round, multiply the sequence sum by 4
+            return 4 * sequence.slice(0, length).reduce((a, b) => a + b, 0);
         }
 
         function calculateOptimalBet() {
@@ -86,6 +88,7 @@
 
             // Calculate total exposure for the specified number of rounds or the length of the Fibonacci sequence, whichever is smaller
             const totalExposure = calculateTotalExposure(fibonacciSequence, Math.min(rounds, fibonacciSequence.length));
+            console.log(`Total Exposure for ${Math.min(rounds, fibonacciSequence.length)} rounds: ${totalExposure}`);
 
             // Calculate the max base bet considering bankroll and max loss
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
@@ -105,7 +108,7 @@
             let worstCaseExposure = 0;
             let actualRounds = rounds;
             for (let i = 0; i < rounds; i++) {
-                worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)];
+                worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)] * 4;
                 if (worstCaseExposure * roundedBaseBet > maxLoss) {
                     actualRounds = i;
                     document.getElementById('result').innerText = `Given your max loss, the ideal number of rounds could be as little as ${i} rounds at a $${roundedBaseBet} base bet.`;
@@ -115,9 +118,9 @@
 
             // Additional Calculations
             const expectedDuration = Math.floor(bankroll / (roundedBaseBet * totalExposure));
-            const potentialWinnings = roundedBaseBet * 0.63 * actualRounds;
-            const riskLevel = roundedBaseBet * actualRounds > bankroll * 0.5 ? 'High' : 'Medium';
-            const lossProbability = 1 - Math.pow(0.63, actualRounds);
+            const potentialWinnings = roundedBaseBet * 0.63 * actualRounds * 4; // since there are 4 bets per round
+            const riskLevel = roundedBaseBet * actualRounds * 4 > bankroll * 0.5 ? 'High' : 'Medium';
+            const lossProbability = 1 - Math.pow(0.63, actualRounds * 4);
 
             console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
             document.getElementById('result').innerText = `
