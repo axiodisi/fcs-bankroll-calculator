@@ -66,8 +66,6 @@
             <input type="number" id="rounds" name="rounds" required>
             <label for="max_loss">Max Loss ($):</label>
             <input type="number" id="max_loss" name="max_loss" required>
-            <label for="take_profit">Take Profit ($):</label>
-            <input type="number" id="take_profit" name="take_profit" required>
             <button type="button" onclick="calculateOptimalBet()">Calculate Optimal Base Bet</button>
         </form>
         <div id="result"></div>
@@ -76,18 +74,15 @@
         const fibonacciSequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
         function calculateTotalExposure(sequence, length) {
-            const exposure = sequence.slice(0, length).reduce((a, b) => a + b, 0);
-            console.log(`Total Exposure for length ${length}: ${exposure}`);
-            return exposure;
+            return sequence.slice(0, length).reduce((a, b) => a + b, 0);
         }
 
         function calculateOptimalBet() {
             const bankroll = parseFloat(document.getElementById('bankroll').value);
             const rounds = parseInt(document.getElementById('rounds').value);
             const maxLoss = parseFloat(document.getElementById('max_loss').value);
-            const takeProfit = parseFloat(document.getElementById('take_profit').value);
 
-            console.log(`Bankroll: ${bankroll}, Rounds: ${rounds}, Max Loss: ${maxLoss}, Take Profit: ${takeProfit}`);
+            console.log(`Bankroll: ${bankroll}, Rounds: ${rounds}, Max Loss: ${maxLoss}`);
 
             // Calculate total exposure for the specified number of rounds or the length of the Fibonacci sequence, whichever is smaller
             const totalExposure = calculateTotalExposure(fibonacciSequence, Math.min(rounds, fibonacciSequence.length));
