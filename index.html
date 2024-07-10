@@ -105,7 +105,7 @@
             let worstCaseExposure = 0;
             for (let i = 0; i < rounds; i++) {
                 worstCaseExposure += fibonacciSequence[Math.min(i, fibonacciSequence.length - 1)];
-                if (worstCaseExposure * roundedBaseBet < maxLoss) {
+                if (worstCaseExposure * roundedBaseBet > maxLoss) {
                     document.getElementById('result').innerText = `Given your max loss, the ideal number of rounds could be as little as ${i} rounds at a $${roundedBaseBet} base bet.`;
                     return;
                 }
