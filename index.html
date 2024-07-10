@@ -42,17 +42,17 @@
             color: white;
             border: none;
             border-radius: 4px;
-            cursor: pointer.
+            cursor: pointer;
         }
         button:hover {
             background-color: #0056b3;
         }
         #result {
-            margin-top: 20px.
-            padding: 10px.
-            background-color: #f1f1f1.
-            border-radius: 4px.
-            text-align: center.
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+            text-align: center;
         }
     </style>
 </head>
@@ -76,9 +76,7 @@
         const fibonacciSequence = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
 
         function calculateTotalExposure(sequence, length) {
-            const exposure = sequence.slice(0, length).reduce((a, b) => a + b, 0);
-            console.log(`Total Exposure for length ${length}: ${exposure}`);
-            return exposure;
+            return sequence.slice(0, length).reduce((a, b) => a + b, 0);
         }
 
         function calculateOptimalBet() {
@@ -89,26 +87,24 @@
 
             console.log(`Bankroll: ${bankroll}, Rounds: ${rounds}, Max Loss: ${maxLoss}, Take Profit: ${takeProfit}`);
 
-            // Calculate total exposure
-            const totalExposure = calculateTotalExposure(fibonacciSequence, fibonacciSequence.length);
+            // Calculate total exposure for the specified number of rounds
+            const totalExposure = calculateTotalExposure(fibonacciSequence, Math.min(rounds, fibonacciSequence.length));
 
             // Determine max base bet considering max loss and ideal number of rounds
             let maxBaseBet = Math.min(bankroll / totalExposure, maxLoss / totalExposure);
+            console.log(`Initial Max Base Bet: ${maxBaseBet}`);
 
-            // Adjust for ideal rounds
-            for (let i = 0; i < rounds; i++) {
-                const exposure = calculateTotalExposure(fibonacciSequence, i + 1);
-                if (maxBaseBet * exposure <= bankroll && maxBaseBet * exposure <= maxLoss) {
-                    let roundedBaseBet = Math.max(Math.ceil(maxBaseBet / (rounds / 10)), 1); // Ensure the minimum base bet is at least $1
-                    console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
-                    document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
-                    return;
-                }
-                maxBaseBet -= 0.1;
-                console.log(`Adjusted Max Base Bet: ${maxBaseBet}`);
+            // Adjust for number of rounds, with a more aggressive approach for fewer rounds
+            if (rounds <= 5) {
+                maxBaseBet = Math.ceil(maxBaseBet / (rounds / 2));
+            } else {
+                maxBaseBet = Math.floor(maxBaseBet / (rounds / 5));
             }
 
-            document.getElementById('result').innerText = 'Unable to determine an optimal base bet. Please adjust your parameters.';
+            // Ensure the minimum base bet is at least $1
+            let roundedBaseBet = Math.max(Math.round(maxBaseBet), 1);
+            console.log(`Optimal Base Bet found: ${roundedBaseBet}`);
+            document.getElementById('result').innerText = `Optimal Base Bet: $${roundedBaseBet}`;
         }
     </script>
 </body>
